@@ -1,0 +1,538 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body,
+#root {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+}
+
+.app-root {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.app-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border, #e5e4e7);
+    background: var(--bg, #fff);
+}
+
+.app-toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.app-toolbar-label {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.app-hint {
+    font-size: 13px;
+    color: #8b8b8b;
+}
+
+.app-canvas {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+}
+
+.app-toolbar-spacer {
+    flex: 1;
+}
+
+/* ===== 草皮调参面板 ===== */
+.grass-panel {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 260px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(4px);
+    z-index: 10;
+    max-height: calc(100% - 24px);
+    overflow-y: auto;
+}
+
+.grass-panel-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.grass-panel-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.param-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.param-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.param-label {
+    font-size: 13px;
+    color: #374151;
+}
+
+.param-value {
+    font-size: 12px;
+    font-family: ui-monospace, Consolas, monospace;
+    color: #6b7280;
+}
+
+/* 滑块两端方向标签 */
+.param-slider-labels {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2px;
+    font-size: 11px;
+    color: #9ca3af;
+    margin-top: -2px;
+}
+
+.param-color {
+    width: 100%;
+    height: 28px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: 2px;
+    cursor: pointer;
+    background: transparent;
+}
+
+.grass-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* 工具栏快捷键提示 */
+.toolbar-shortcut {
+    display: block;
+    font-size: 10px;
+    color: #9ca3af;
+    margin-top: 2px;
+}
+
+/* ===== 划线子选项（划线模式下展开） ===== */
+.toolbar-draw-sub {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 4px;
+    border-left: 2px solid #2563eb;
+    margin-left: 6px;
+}
+
+/* ===== 区域高亮面板（右侧抽屉） ===== */
+.highlight-panel {
+    width: 360px;
+}
+
+/* ===== 图层面板 ===== */
+.layers-panel {
+    width: 280px;
+}
+
+.draw-toolbar-actions {
+    display: flex;
+    gap: 2px;
+}
+
+.draw-toolbar-count {
+    font-size: 12px;
+    font-weight: 400;
+    color: #6b7280;
+    margin-left: 6px;
+}
+
+.highlight-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.highlight-name {
+    font-size: 13px;
+    color: #374151;
+}
+
+.zone-state-btns {
+    display: flex;
+    gap: 4px;
+}
+
+/* ===== 划线模式浮动条（顶部居中） ===== */
+.draw-toolbar {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 280px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(4px);
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.draw-toolbar-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* ===== 划线设置面板（选中划线后显示） ===== */
+.drawing-panel {
+    width: 240px;
+}
+
+.draw-color-btns {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.draw-color-btn {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    outline: none;
+    transition: transform 0.1s;
+}
+
+.draw-color-btn:hover {
+    transform: scale(1.15);
+}
+
+.draw-color-btn.active {
+    border-color: #111827;
+    box-shadow: 0 0 0 2px rgba(17, 24, 39, 0.15);
+}
+
+/* ===== 镜头平移控制器（放大后显示，左下角） ===== */
+.pan-pad {
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(4px);
+}
+
+.pan-pad-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.pan-pad-btn {
+    user-select: none;
+    touch-action: none;
+}
+
+.pan-pad-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.pan-pad-hint {
+    font-size: 11px;
+    color: #9ca3af;
+    user-select: none;
+}
+
+/* ===== 左侧工具栏 ===== */
+.toolbar {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 6px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* ===== 标线调参面板 ===== */
+.marking-panel {
+    top: 12px;
+    right: 12px;
+}
+
+.marking-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.marking-group-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 2px;
+}
+
+.marking-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* ===== 球员相关 ===== */
+.player-number {
+    min-width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: system-ui, sans-serif;
+    border: 1.5px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    user-select: none;
+    pointer-events: none;
+}
+
+.player-panel {
+    top: 12px;
+    right: 12px;
+}
+
+.param-btn-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.param-xy {
+    display: flex;
+    gap: 8px;
+}
+
+.param-xy > div {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ===== 球员面板双列布局 ===== */
+.player-panel-wide {
+    width: 740px;
+    max-width: calc(100vw - 24px);
+}
+
+.player-panel-grid {
+    display: grid;
+    grid-template-columns: 210px minmax(0, 1fr) minmax(0, 1fr);
+    gap: 16px;
+}
+
+.player-panel-col {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+}
+
+/* 姿态编辑器容器：横跨后两列（内部再分两列） */
+.pose-col {
+    grid-column: span 2;
+}
+
+/* ===== 动作下拉项（名称 + 删除按钮） ===== */
+.action-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.action-item-delete {
+    flex-shrink: 0;
+    opacity: 0.6;
+    width: 22px;
+    height: 22px;
+}
+
+.action-item-delete:hover {
+    opacity: 1;
+}
+
+/* ===== 预设动作管理弹窗 ===== */
+.action-manager-dialog {
+    width: 540px;
+}
+
+.action-manager-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.action-manager-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: rgba(248, 250, 252, 0.6);
+    cursor: grab;
+}
+
+.action-manager-item.dragging {
+    opacity: 0.35;
+    cursor: grabbing;
+}
+
+/* 插入位置指示线（拖拽悬停时） */
+.action-manager-item.drop-before {
+    box-shadow: inset 0 2px 0 #2563eb;
+}
+
+.action-manager-item.drop-after {
+    box-shadow: inset 0 -2px 0 #2563eb;
+}
+
+.action-manager-tail-line {
+    height: 2px;
+    border-radius: 1px;
+    background: #2563eb;
+    margin: 0 4px;
+}
+
+.action-manager-grip {
+    width: 14px;
+    height: 14px;
+    color: #9ca3af;
+    flex-shrink: 0;
+    cursor: grab;
+}
+
+.action-manager-name {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.action-manager-select {
+    width: 110px;
+}
+
+.action-manager-empty {
+    color: #6b7280;
+    font-size: 13px;
+    padding: 16px 0;
+    text-align: center;
+}
+
+/* ===== 姿态编辑器（卡片布局） ===== */
+.pose-editor {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 10px;
+}
+
+.pose-editor-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+}
+
+.pose-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(248, 250, 252, 0.6);
+}
+
+.pose-card .param-row {
+    gap: 4px;
+}
+
+.pose-card .param-header {
+    margin-bottom: 0;
+}
+
+/* ===== 球队调参面板 ===== */
+.team-panel {
+    top: 12px;
+    right: 12px;
+}
+
+.team-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+}
+
+.team-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
